@@ -6,9 +6,17 @@ public class FracCalc {
     public static void main(String[] args) 
     {
         // TODO: Read the input from the user and call produceAnswer with an equation
+    	boolean done = false;
     	Scanner userInput = new Scanner(System.in);
-    	produceAnswer(userInput.nextLine());
-    	
+    	while (!done) {
+    		System.out.print("Enter your equation or type 'quit' to quit. ");
+    		String input = userInput.nextLine();
+    		if (input.equals("quit")) {
+    			done = true;
+    		} else {
+    			System.out.println(produceAnswer(input))	;
+    		}
+    	}	
     	userInput.close();
     	
     }
@@ -24,14 +32,14 @@ public class FracCalc {
     public static String produceAnswer(String input)
     { 
         // TODO: Implement this function to produce the solution to the input
-        String[] inputArr = input.split(" ");
-        // inputArr[0] = toImproperFrac()
-        return "";
+       
+    	String[] inputArr = input.split(" ");
+        String firstOprd = inputArr[0];
+        String operator = inputArr[1];
+        String secondOprd = inputArr[2];
+    	return secondOprd;
     }
 
     // TODO: Fill in the space below with any helper methods that you think you will need
-	public static String toImproperFrac (int whole, int numerator, int denominator) {
-		int x = whole*denominator + numerator;
-		return (x+"/"+denominator);
-	}
+
 }
