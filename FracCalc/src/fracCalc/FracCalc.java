@@ -23,28 +23,69 @@ public class FracCalc {
     public static String produceAnswer(String input)
     { 
 
+    			
     	//split input into first operand, operator, and second operand
     	String[] inputArr = input.split(" ");
-        String oprnd1 = inputArr[0];
-        String operator = inputArr[1];
-        String oprnd2 = inputArr[2];
-        
-        //call parseFrac to parse fraction into ints
-        int[] oprnd1Arr = parseFrac(oprnd1);
-        int whole1 = oprnd1Arr[0];
-        int numer1 = oprnd1Arr[1];
-        int denom1 = oprnd1Arr[2];  
-        numer1 += (absValue(whole1) * denom1); //convert to improper
-        if (whole1 < 0) {numer1*= -1;} //yay negatives
-        
-        int[] oprnd2Arr = parseFrac(oprnd2);
-        int whole2 = oprnd2Arr[0];
-        int numer2 = oprnd2Arr[1];
-        int denom2 = oprnd2Arr[2]; 
-        numer2 += (absValue(whole2) * denom2); //convert to improper
-        if (whole2 < 0) {numer2*= -1;} //yay negatives
-        
-        //evaluate the formula
+    	
+    	String[] answers = new String[((inputArr.length+1)/2)];
+    	answers[0] = inputArr[0];
+    
+    	int answersPos = 0;
+    	for (int i = 0; i < (inputArr.length-2); i+=2) {
+    		String oprnd1 = answers[answersPos];
+    		String operator = inputArr[i+1];
+            String oprnd2 = inputArr[i+2];
+    		
+            //call parseFrac to parse fraction into ints
+    		int[] oprnd1Arr = parseFrac(oprnd1); //oprnd1 = next value in answers array
+            int whole1 = oprnd1Arr[0];
+            int numer1 = oprnd1Arr[1];
+            int denom1 = oprnd1Arr[2];  
+            numer1 += (absValue(whole1) * denom1); //convert to improper
+            if (whole1 < 0) {numer1*= -1;} //yay negatives
+            
+            int[] oprnd2Arr = parseFrac(oprnd2);
+            int whole2 = oprnd2Arr[0];
+            int numer2 = oprnd2Arr[1];
+            int denom2 = oprnd2Arr[2]; 
+            numer2 += (absValue(whole2) * denom2); //convert to improper
+            if (whole2 < 0) {numer2*= -1;} //yay negatives
+            
+            answersPos++;
+            answers[answersPos] = evalFormula(numer1, denom1, numer2, denom2, operator);
+    	}
+    	
+    	return answers[answers.length - 1];
+    	
+    }
+
+    //methods to reduce repetitiveness:
+    public static int[] parseFrac(String oprnd) {
+		int whole = 0;
+		int numer = 0;
+		int denom = 1;
+		String[] firstSplit = oprnd.split("_"); 
+		if (oprnd.contains("/")) //if there is a fraction
+		{ 
+			String fraction = firstSplit[firstSplit.length - 1]; //get the last value split
+			String[] secondSplit = fraction.split("/"); //split into numer and denom
+			numer = Integer.parseInt(secondSplit[0]); //assign 0 to numer
+			denom = Integer.parseInt(secondSplit[1]); //assign 1 to denom	
+			if (oprnd.contains("_")) 
+			{ //if there also is a whole
+				whole = Integer.parseInt(firstSplit[0]); //assign first value to whole
+			}
+		} else 
+		{ //if there is no fraction
+			whole = Integer.parseInt(firstSplit[0]); //assign first value to whole
+		}
+
+		int[] returnArr = {whole, numer, denom};
+		return returnArr;
+    }
+
+	//evaluate the formula
+    public static String evalFormula(int numer1, int denom1, int numer2, int denom2, String operator) {
         if (operator.equals("+") || operator.equals("-")) { //addition or subtraction: change denom
         	int lcm = lcm(denom1, denom2);
         	int multiplier1 = lcm/denom1;
@@ -73,31 +114,6 @@ public class FracCalc {
         	int denomFinal = denom1 * denom2;
         	return reduceFrac(numerFinal,denomFinal);
         }
-    }
-
-    //methods to reduce repetitiveness:
-    public static int[] parseFrac(String oprnd) {
-		int whole = 0;
-		int numer = 0;
-		int denom = 1;
-		String[] firstSplit = oprnd.split("_"); 
-		if (oprnd.contains("/")) //if there is a fraction
-		{ 
-			String fraction = firstSplit[firstSplit.length - 1]; //get the last value split
-			String[] secondSplit = fraction.split("/"); //split into numer and denom
-			numer = Integer.parseInt(secondSplit[0]); //assign 0 to numer
-			denom = Integer.parseInt(secondSplit[1]); //assign 1 to denom	
-			if (oprnd.contains("_")) 
-			{ //if there also is a whole
-				whole = Integer.parseInt(firstSplit[0]); //assign first value to whole
-			}
-		} else 
-		{ //if there is no fraction
-			whole = Integer.parseInt(firstSplit[0]); //assign first value to whole
-		}
-
-		int[] returnArr = {whole, numer, denom};
-		return returnArr;
     }
     
     public static String reduceFrac(int numer, int denom) {
