@@ -3,8 +3,7 @@ import java.util.*;
 
 public class FracCalc {
 
-    public static void main(String[] args) 
-    {
+    public static void main(String[] args) {
     	boolean done = false;
     	Scanner userInput = new Scanner(System.in);
     	while (!done) {
@@ -16,15 +15,12 @@ public class FracCalc {
     			System.out.println(produceAnswer(input));
     		}
     	}	
-    	userInput.close();
-    	
+    	userInput.close();	
     }
 
-    public static String produceAnswer(String input)
-    { 
+    public static String produceAnswer(String input){ 
 
-    			
-    	//split input into first operand, operator, and second operand
+    	//split input into operands and operators
     	String[] inputArr = input.split(" ");
     	
     	String[] answers = new String[((inputArr.length+1)/2)];
